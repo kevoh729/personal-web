@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Knowledge Base</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>Knowledge Base - Admin</h1>
+            </div>
+            <div class="admin-nav-actions">
+                <button class="btn-admin-action" id="backBtn">Back to Site</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container admin-container">
+        <div class="admin-wrapper">
+            <!-- Sidebar -->
+            <aside class="admin-sidebar">
+                <nav class="admin-menu">
+                    <button class="admin-menu-item active" data-panel="overview">
+                        Overview
+                    </button>
+                    <button class="admin-menu-item" data-panel="add-entry">
+                        Add Entry
+                    </button>
+                    <button class="admin-menu-item" data-panel="manage">
+                        Manage Entries
+                    </button>
+                    <button class="admin-menu-item" data-panel="import-export">
+                        Import/Export
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Main Panel -->
+            <div class="admin-main">
+                <!-- Overview Panel -->
+                <div class="admin-panel active" id="overview-panel">
+                    <h2>Dashboard Overview</h2>
+                    <div class="overview-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalEntries">0</div>
+                            <div class="stat-label">Total Entries</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalSections">0</div>
+                            <div class="stat-label">Sections</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="recentEntries">0</div>
+                            <div class="stat-label">This Month</div>
+                        </div>
+                    </div>
+
+                    <div class="recent-entries">
+                        <h3>Recent Entries</h3>
+                        <div id="recentList" class="entries-list">
+                            <!-- Recent entries will be listed here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Entry Panel -->
+                <div class="admin-panel" id="add-entry-panel">
+                    <h2>Add New Entry</h2>
+                    <form id="addEntryForm" class="admin-form">
+                        <div class="form-group">
+                            <label for="entryTitle">Title *</label>
+                            <input type="text" id="entryTitle" name="title" required placeholder="Entry title">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="entrySection">Section *</label>
+                            <input type="text" id="entrySection" name="section" required placeholder="e.g., Engineering, Finance, Business">
+                            <small>New sections are created automatically</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="entryDate">Date *</label>
+                            <input type="date" id="entryDate" name="date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="entryContent">Content (HTML allowed) *</label>
+                            <textarea id="entryContent" name="content" required placeholder="&lt;p&gt;Your content here...&lt;/p&gt;" rows="8"></textarea>
+                            <small>You can use HTML tags: &lt;p&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;strong&gt;, &lt;em&gt;, etc.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mediaType">Media Type</label>
+                            <select id="mediaType" name="media_type">
+                                <option value="">None</option>
+                                <option value="image">Image</option>
+                                <option value="video">Video (YouTube, Vimeo, or URL)</option>
+                                <option value="link">External Link</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="mediaUrlGroup" style="display: none;">
+                            <label for="mediaUrl">Media URL</label>
+                            <input type="url" id="mediaUrl" name="media_url" placeholder="https://example.com/image.jpg">
+                            <small id="mediaUrlHint"></small>
+                        </div>
+
+                        <div class="form-group" id="linkUrlGroup" style="display: none;">
+                            <label for="linkUrl">External Link URL</label>
+                            <input type="url" id="linkUrl" name="link_url" placeholder="https://example.com">
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Add Entry</button>
+                            <button type="reset" class="btn-secondary">Clear</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Manage Entries Panel -->
+                <div class="admin-panel" id="manage-panel">
+                    <h2>Manage Entries</h2>
+                    
+                    <div class="manage-controls">
+                        <input type="text" id="searchEntries" placeholder="Search entries..." class="search-input">
+                        <select id="filterSection" class="filter-select">
+                            <option value="">All Sections</option>
+                        </select>
+                    </div>
+
+                    <div id="entriesList" class="admin-entries-list">
+                        <!-- Entries will be listed here -->
+                    </div>
+                </div>
+
+                <!-- Import/Export Panel -->
+                <div class="admin-panel" id="import-export-panel">
+                    <h2>Import & Export</h2>
+                    
+                    <div class="import-export-container">
+                        <div class="ie-section">
+                            <h3>Export Entries</h3>
+                            <p>Download your entries as a JSON file for backup or sharing.</p>
+                            <button id="exportBtn" class="btn-primary">Download JSON</button>
+                        </div>
+
+                        <div class="ie-divider"></div>
+
+                        <div class="ie-section">
+                            <h3>Import Entries</h3>
+                            <p>Upload a JSON file to import or restore entries. This will merge with existing entries.</p>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="importFile" accept=".json" hidden>
+                                <button id="importBtn" class="btn-primary">Choose File</button>
+                            </div>
+                            <div id="importStatus" style="margin-top: 1rem;"></div>
+                        </div>
+
+                        <div class="ie-divider"></div>
+
+                        <div class="ie-section warning">
+                            <h3>Sync with entries.json</h3>
+                            <p>After adding/deleting entries here, you need to sync changes to your entries.json file:</p>
+                            <ol>
+                                <li>Click "Download JSON" above</li>
+                                <li>Replace your entries.json file with the downloaded file</li>
+                                <li>Refresh the site to see changes</li>
+                            </ol>
+                            <p><strong>OR</strong> your changes are automatically saved in this browser (localStorage).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal" role="dialog" aria-label="Confirm delete">
+        <div class="modal-content">
+            <button class="modal-close" id="deleteModalClose">
+                <span></span>
+                <span></span>
+            </button>
+            <div class="modal-body">
+                <h3>Delete Entry?</h3>
+                <p id="deleteMessage"></p>
+                <div class="modal-actions">
+                    <button id="deleteConfirm" class="btn-danger">Delete</button>
+                    <button id="deleteCancel" class="btn-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="deleteOverlay"></div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

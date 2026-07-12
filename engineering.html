@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering - Knowledge Base</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>Knowledge Base</h1>
+            </div>
+            <div class="nav-flex">
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html" class="nav-link" data-section="all">All</a></li>
+                </ul>
+                <a href="admin.html" class="nav-admin-link" title="Admin Panel">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="content-wrapper">
+            <!-- Entries Grid -->
+            <div class="entries-grid" id="entriesGrid">
+                <!-- Cards will be dynamically generated here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Entry Detail Modal -->
+    <div class="modal" id="entryModal" role="dialog" aria-label="Entry details">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="Close modal">
+                <span></span>
+                <span></span>
+            </button>
+            <div class="modal-body">
+                <div class="entry-detail" id="entryDetail">
+                    <!-- Entry details will be dynamically generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

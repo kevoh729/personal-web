@@ -1,0 +1,54 @@
+{
+  "entries": [
+    {
+      "id": 1,
+      "title": "Understanding Neural Networks",
+      "section": "Engineering",
+      "date": "2026-07-12",
+      "content": "<p>Neural networks are computational models inspired by biological neurons. They consist of interconnected nodes that process information through weighted connections.</p><p><strong>Key Components:</strong></p><ul><li>Input layer - receives raw data</li><li>Hidden layers - process information</li><li>Output layer - produces results</li><li>Activation functions - introduce non-linearity</li></ul><p>The training process uses backpropagation to adjust weights based on error signals, enabling the network to learn complex patterns from data.</p>",
+      "media_type": "image",
+      "media_url": "https://via.placeholder.com/800x400?text=Neural+Networks",
+      "link_url": null
+    },
+    {
+      "id": 2,
+      "title": "The Psychology of Money",
+      "section": "Finance",
+      "date": "2026-07-10",
+      "content": "<p>Money is more about psychology than mathematics. Our relationship with wealth is shaped by our past experiences and emotional patterns.</p><p><strong>Key Insights:</strong></p><ul><li>Wealth is invisible - true net worth is rarely on display</li><li>The key factor is how much you save, not how much you earn</li><li>Financial success requires a long time horizon</li><li>Luck and risk play larger roles than we admit</li></ul><p>Understanding our behavioral biases around money is crucial for building long-term financial security.</p>",
+      "media_type": "link",
+      "media_url": null,
+      "link_url": "https://www.amazon.com/Psychology-Money-Timeless-lessons-wealth"
+    },
+    {
+      "id": 3,
+      "title": "Building Scalable Systems",
+      "section": "Engineering",
+      "date": "2026-07-08",
+      "content": "<p>Scalability is about designing systems that can handle growth without fundamental redesign. There are two primary approaches to scaling:</p><p><strong>Vertical Scaling:</strong> Adding more resources to a single server - limited by hardware constraints.</p><p><strong>Horizontal Scaling:</strong> Adding more servers to distribute load - more complex but virtually unlimited.</p><p>Effective strategies include load balancing, database sharding, caching layers, and asynchronous processing. The goal is to decouple components and reduce dependencies.</p>",
+      "media_type": null,
+      "media_url": null,
+      "link_url": null
+    },
+    {
+      "id": 4,
+      "title": "Principles of Effective Leadership",
+      "section": "Business",
+      "date": "2026-07-05",
+      "content": "<p>Leadership is the ability to influence others toward a common goal. The most effective leaders combine clarity, empathy, and accountability.</p><p><strong>Core Principles:</strong></p><ul><li>Lead by example - your actions speak louder than words</li><li>Communicate clearly - ambiguity breeds confusion</li><li>Develop your team - invest in people's growth</li><li>Make decisive decisions - indecision creates chaos</li><li>Take ownership of failures - create psychological safety</li></ul><p>Great leaders understand that their primary job is to enable their teams to do their best work.</p>",
+      "media_type": "image",
+      "media_url": "https://via.placeholder.com/800x400?text=Leadership",
+      "link_url": null
+    },
+    {
+      "id": 5,
+      "title": "The Art of Compound Growth",
+      "section": "Inspiration",
+      "date": "2026-07-01",
+      "content": "<p>Compound growth is one of the most powerful forces in nature and finance. Small, consistent improvements compound into extraordinary results over time.</p><p>A 1% improvement each day results in a 37x improvement in a year. This principle applies to:</p><ul><li>Learning and skill development</li><li>Financial wealth through investing</li><li>Business growth through customer satisfaction</li><li>Personal health through consistent habits</li></ul><p>The key is patience and consistency. Most people overestimate what they can achieve in a year but underestimate what they can achieve in a decade.</p>",
+      "media_type": null,
+      "media_url": null,
+      "link_url": null
+    }
+  ]
+}
