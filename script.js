@@ -129,6 +129,8 @@ function determineCurrentSection() {
         currentSection = 'Business';
     } else if (currentPage === 'inspiration.html') {
         currentSection = 'Inspiration';
+    } else if (currentPage === 'ideas.html') {
+        currentSection = 'Ideas';
     }
 }
 

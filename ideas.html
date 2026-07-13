@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ideas - Knowledge Base</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>Knowledge Base</h1>
+            </div>
+            <div class="nav-flex">
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html" class="nav-link" data-section="all">All</a></li>
+                </ul>
+                <a href="admin.html" class="nav-admin-link" title="Admin Panel">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="content-wrapper">
+            <div class="entries-grid" id="entriesGrid"></div>
+        </div>
+    </main>
+
+    <div class="modal" id="entryModal" role="dialog" aria-label="Entry details">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="Close modal">
+                <span></span>
+                <span></span>
+            </button>
+            <div class="modal-body">
+                <div class="entry-detail" id="entryDetail"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
