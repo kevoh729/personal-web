@@ -71,8 +71,9 @@
 
                 <!-- Add Entry Panel -->
                 <div class="admin-panel" id="add-entry-panel">
-                    <h2>Add New Entry</h2>
+                    <h2 id="addEntryHeading">Add New Entry</h2>
                     <form id="addEntryForm" class="admin-form">
+                        <input type="hidden" id="entryId" name="entry_id" value="">
                         <div class="form-group">
                             <label for="entryTitle">Title *</label>
                             <input type="text" id="entryTitle" name="title" required placeholder="Entry title">
@@ -117,7 +118,7 @@
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="btn-primary">Add Entry</button>
+                            <button type="submit" class="btn-primary" id="submitEntryBtn">Add Entry</button>
                             <button type="reset" class="btn-secondary">Clear</button>
                         </div>
                     </form>

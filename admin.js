@@ -7,6 +7,7 @@
 let allEntries = [];
 let nextId = 1;
 let deleteTargetId = null;
+let editTargetId = null;
 const STORAGE_KEY = 'kb_entries';
 
 /* =============================================================================
@@ -25,19 +26,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function initializeAdmin() {
-    // Try to load from entries.json first, then fall back to localStorage
-    try {
-        const response = await fetch('entries.json');
-        if (response.ok) {
-            const data = await response.json();
-            allEntries = data.entries || [];
-            saveToLocalStorage();
-        }
-    } catch (e) {
-        // entries.json might not exist or there's a CORS issue
-        const stored = loadFromLocalStorage();
-        if (stored.length > 0) {
-            allEntries = stored;
+    const storedEntries = loadFromLocalStorage();
+
+    if (storedEntries.length > 0) {
+        allEntries = storedEntries;
+    } else {
+        try {
+            const response = await fetch('entries.json');
+            if (response.ok) {
+                const data = await response.json();
+                allEntries = data.entries || [];
+                saveToLocalStorage();
+            }
+        } catch (e) {
+            console.warn('No local data found; using empty state.', e);
         }
     }
 
@@ -46,9 +48,7 @@ async function initializeAdmin() {
         nextId = Math.max(...allEntries.map(e => e.id)) + 1;
     }
 
-    // Set default date to today
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('entryDate').valueAsDate = new Date(today + 'T00:00:00');
+    resetEntryForm();
 }
 
 /* =============================================================================
@@ -58,6 +58,7 @@ async function initializeAdmin() {
 function saveToLocalStorage() {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(allEntries));
+        window.dispatchEvent(new CustomEvent('entries-updated', { detail: allEntries }));
     } catch (e) {
         console.error('Failed to save to localStorage:', e);
     }
@@ -89,7 +90,9 @@ function setupEventListeners() {
     });
 
     // Add entry form
-    document.getElementById('addEntryForm').addEventListener('submit', handleAddEntry);
+    const addEntryForm = document.getElementById('addEntryForm');
+    addEntryForm.addEventListener('submit', handleAddEntry);
+    addEntryForm.addEventListener('reset', () => resetEntryForm(true));
 
     // Media type change
     document.getElementById('mediaType').addEventListener('change', handleMediaTypeChange);
@@ -215,8 +218,9 @@ function handleAddEntry(e) {
     e.preventDefault();
 
     const formData = new FormData(e.target);
-    const newEntry = {
-        id: nextId++,
+    const entryId = Number(formData.get('entry_id') || 0);
+
+    const entryPayload = {
         title: formData.get('title').trim(),
         section: formData.get('section').trim(),
         date: formData.get('date'),
@@ -227,25 +231,33 @@ function handleAddEntry(e) {
     };
 
     // Validate
-    if (!newEntry.title || !newEntry.section || !newEntry.content) {
+    if (!entryPayload.title || !entryPayload.section || !entryPayload.content) {
         showNotification('Please fill in all required fields', 'error');
         return;
     }
 
-    // Add entry
-    allEntries.push(newEntry);
+    let actionText = 'added';
+    if (entryId) {
+        const index = allEntries.findIndex(entry => entry.id === entryId);
+        if (index === -1) {
+            showNotification('The selected entry could not be found.', 'error');
+            return;
+        }
+
+        allEntries[index] = { ...allEntries[index], ...entryPayload };
+        actionText = 'updated';
+    } else {
+        const newEntry = { id: nextId++, ...entryPayload };
+        allEntries.push(newEntry);
+    }
+
     allEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    // Save and reset
     saveToLocalStorage();
-    e.target.reset();
+    resetEntryForm();
 
-    // Set default date again
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('entryDate').valueAsDate = new Date(today + 'T00:00:00');
-
-    showNotification(`Entry "${newEntry.title}" added successfully!`, 'success');
+    showNotification(`Entry "${entryPayload.title}" ${actionText} successfully!`, 'success');
     renderOverview();
+    renderManagePanel();
 }
 
 /* =============================================================================
@@ -312,6 +324,7 @@ function renderEntriesList(entries) {
                 </div>
             </div>
             <div class="admin-entry-actions">
+                <button class="btn-edit" onclick="startEditingEntry(${entry.id})">Edit</button>
                 <button class="btn-delete" onclick="showDeleteModal(${entry.id})">Delete</button>
             </div>
         </div>
@@ -356,6 +369,7 @@ function confirmDelete() {
     showNotification(`Entry "${deletedEntry.title}" deleted successfully!`, 'success');
     filterEntries();
     renderOverview();
+    renderManagePanel();
 }
 
 /* =============================================================================
@@ -429,6 +443,43 @@ function handleImportFile(e) {
 /* =============================================================================
    UTILITY FUNCTIONS
    ============================================================================= */
+
+function startEditingEntry(entryId) {
+    const entry = allEntries.find(item => item.id === entryId);
+    if (!entry) return;
+
+    editTargetId = entryId;
+    document.getElementById('entryId').value = entry.id;
+    document.getElementById('entryTitle').value = entry.title;
+    document.getElementById('entrySection').value = entry.section;
+    document.getElementById('entryDate').value = entry.date;
+    document.getElementById('entryContent').value = entry.content;
+    document.getElementById('mediaType').value = entry.media_type || '';
+    document.getElementById('mediaUrl').value = entry.media_url || '';
+    document.getElementById('linkUrl').value = entry.link_url || '';
+
+    document.getElementById('addEntryHeading').textContent = 'Edit Entry';
+    document.getElementById('submitEntryBtn').textContent = 'Save Changes';
+    handleMediaTypeChange({ target: document.getElementById('mediaType') });
+    switchPanel('add-entry');
+}
+
+function resetEntryForm(skipReset = false) {
+    editTargetId = null;
+
+    if (!skipReset) {
+        document.getElementById('addEntryForm').reset();
+    }
+
+    document.getElementById('entryId').value = '';
+    document.getElementById('addEntryHeading').textContent = 'Add New Entry';
+    document.getElementById('submitEntryBtn').textContent = 'Add Entry';
+    document.getElementById('mediaUrlGroup').style.display = 'none';
+    document.getElementById('linkUrlGroup').style.display = 'none';
+
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('entryDate').valueAsDate = new Date(today + 'T00:00:00');
+}
 
 function getUniqueSections() {
     const sections = new Set();

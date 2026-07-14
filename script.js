@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Set up event listeners
         setupEventListeners();
         window.addEventListener('storage', handleStorageUpdate);
+        window.addEventListener('entries-updated', handleStorageUpdate);
     } catch (error) {
         console.error('Failed to initialize application:', error);
         displayErrorMessage('Failed to load entries. Please refresh the page.');
